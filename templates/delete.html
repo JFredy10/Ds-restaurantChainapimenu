@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Eliminar Producto</h1>
+    <h2>¿Seguro que deseas eliminar el producto "{{ product.nombre }}"?</h2>
+    <form method="post">
+        <button type="submit">Eliminar Producto</button>
+    </form>
+    <a href="/products/">Volver a la lista de productos</a>
+{% endblock %}

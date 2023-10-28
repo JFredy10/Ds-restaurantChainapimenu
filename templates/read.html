@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Detalles del Producto</h1>
+    <h2>{{ product.nombre }}</h2>
+    <p><strong>Descripción:</strong> {{ product.descripcion }}</p>
+    <p><strong>Precio:</strong> ${{ product.precio }}</p>
+    <img src="/static/archivos/{{ product.imagen }}" alt="{{ product.nombre }}"><br>
+    <a href="/products/">Volver a la lista de productos</a>
+{% endblock %}

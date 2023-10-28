@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Editar Producto</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" value="{{ product.nombre }}" required><br>
+        <label for="descripcion">Descripción:</label>
+        <textarea name="descripcion" rows="4" required>{{ product.descripcion }}</textarea><br>
+        <label for="precio">Precio:</label>
+        <input type="number" name="precio" step="0.01" min="0.01" value="{{ product.precio }}" required><br>
+        <label for="imagen">Imagen:</label>
+        <input type="file" name="imagen" accept="image/*"><br>
+        <button type="submit">Actualizar Producto</button>
+    </form>
+    <a href="/products/">Volver a la lista de productos</a>
+{% endblock %}
