@@ -1,7 +1,7 @@
-fastapi>=0.104.0
-uvicorn>=0.23.2
+fastapi
+uvicorn
 psycopg2
-SQLAlchemy>=1.4.49
+SQLAlchemy
 Jinja2
-pydantic>=2.4.2
-starlette>=0.27.0
+pydantic
+starlette
