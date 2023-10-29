@@ -1,13 +1,13 @@
-from fastapi import FastAPI, HTTPException, File, UploadFile, Form
-from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from pydantic import BaseModel
-from typing import List
 import os
-from starlette.requests import Request
+from typing import List
+
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker
+from starlette.requests import Request
 
 # Configuración de la base de datos (PostgreSQL)
 DATABASE_URL = "postgresql://databasemenu_user:ZnoY5wh7SjJ3aybp42olfAeaR6xmzWWm@dpg-ckr9rehrfc9c73djbtu0-a/databasemenu"
@@ -21,6 +21,7 @@ templates = Jinja2Templates(directory="templates")
 # Definir el modelo de producto usando SQLAlchemy
 Base = declarative_base()
 
+
 class ProductDB(Base):
     __tablename__ = "products"
 
@@ -30,21 +31,23 @@ class ProductDB(Base):
     descripcion = Column(String, nullable=False)
     precio = Column(Float, nullable=False)
 
+
 # Pydantic model para la validación de datos
 class Product(BaseModel):
     nombre: str
     descripcion: str
     precio: float
 
+
 # Rutas para operaciones CRUD
 
 @app.post("/products/", response_model=Product)
 async def create_product(
-    request: Request,
-    nombre: str = Form(...),
-    descripcion: str = Form(...),
-    precio: float = Form(...),
-    imagen: UploadFile = File(...)
+        request: Request,
+        nombre: str = Form(...),
+        descripcion: str = Form(...),
+        precio: float = Form(...),
+        imagen: UploadFile = File(...)
 ):
     # Guardar la imagen en el servidor
     imagen_nombre = imagen.filename
@@ -62,12 +65,14 @@ async def create_product(
 
     return templates.TemplateResponse("create.html", {"request": request, "message": "Producto creado con éxito"})
 
+
 @app.get("/products/", response_model=List[Product])
 async def read_products(request: Request):
     db = SessionLocal()
     products = db.query(ProductDB).all()
     db.close()
     return templates.TemplateResponse("list_products.html", {"request": request, "products": products})
+
 
 @app.get("/products/{product_id}", response_model=Product)
 async def read_product(product_id: int, request: Request):
@@ -78,14 +83,15 @@ async def read_product(product_id: int, request: Request):
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return templates.TemplateResponse("read.html", {"request": request, "product": product})
 
+
 @app.put("/products/{product_id}", response_model=Product)
 async def update_product(
-    product_id: int,
-    request: Request,
-    nombre: str = Form(...),
-    descripcion: str = Form(...),
-    precio: float = Form(...),
-    imagen: UploadFile = File(None)
+        product_id: int,
+        request: Request,
+        nombre: str = Form(...),
+        descripcion: str = Form(...),
+        precio: float = Form(...),
+        imagen: UploadFile = File(None)
 ):
     db = SessionLocal()
     product = db.query(ProductDB).filter(ProductDB.id == product_id).first()
@@ -111,6 +117,7 @@ async def update_product(
 
     return templates.TemplateResponse("update.html", {"request": request, "message": "Producto actualizado con éxito"})
 
+
 @app.delete("/products/{product_id}", response_model=Product)
 async def delete_product(product_id: int, request: Request):
     db = SessionLocal()
@@ -131,7 +138,8 @@ async def delete_product(product_id: int, request: Request):
 
     return templates.TemplateResponse("delete.html", {"request": request, "message": "Producto eliminado con éxito"})
 
+
 if __name__ == '__main__':
     import uvicorn
+
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-    
